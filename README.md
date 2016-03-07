@@ -6,11 +6,9 @@ The player is a vampire that lives in a large randomly generated city and the ob
 
 [Development blog](https://teamkalamakkara.wordpress.com/)
 
-### Build instructions
+#### Build instructions
 
 Install [MonoGame](http://www.monogame.net/) and [Purescript](http://www.purescript.org/). Build the solution using Visual Studio, MSBuild or xbuild.
-
-### Building Purescript scripts
 
 Run the following commands in the ps directory:
 ```
