@@ -8,4 +8,4 @@ data GameState = GameState
     }
 
 initialGameState :: GameState
-initialGameState = GameState { level: newLevel 10 10 }
+initialGameState = GameState { level: newLevel 20 20 }

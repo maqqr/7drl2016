@@ -115,8 +115,14 @@ namespace DRLacula
                                  color);
         }
 
+        public void DrawChar2(string c, int x, int y, int r, int g, int b)
+        {
+            DrawChar(c[0], x, y, new Color(r, g, b));
+        }
+
         public void DrawString(string s, int x, int y, int r, int g, int b, bool centered)
         {
+            var col = new Color(r, g, b);
             int startX = x;
             if (centered)
                 x -= s.Length / 2;
@@ -129,7 +135,7 @@ namespace DRLacula
                     y += 1;
                     continue;
                 }
-                DrawChar(c, x, y, new Color(r, g, b));
+                DrawChar(c, x, y, col);
                 x++;
             }
         }

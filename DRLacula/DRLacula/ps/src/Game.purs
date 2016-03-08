@@ -11,7 +11,7 @@ initialState :: GameState
 initialState = initialGameState
 
 drawFunc :: GameState -> EngineEff Unit
-drawFunc state = drawMenu
+drawFunc (GameState state) = drawLevel state.level
 
 onKeyPress :: GameState -> Int -> Boolean -> GameState
 onKeyPress state key shift = state
