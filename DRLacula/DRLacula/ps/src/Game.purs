@@ -1,16 +1,14 @@
 module Game where
 
 import Prelude
-import Data.List
+import Data.Array
 
 import Engine.Graphics
 import Engine.Effects (EngineEff)
 import Engine.Color
 
-import Data.String
-import Data.Char
-
-infixr 6 Cons as :
+import Data.String (fromChar)
+import Data.Char (fromCharCode)
 
 type GameState = Int
 
@@ -29,16 +27,13 @@ onKeyPress :: GameState -> Int -> Boolean -> GameState
 onKeyPress state key shift = state + 1
 
 drawMenu :: Int -> Int -> EngineEff Unit
-drawMenu x y = drawer gameTitle y
+drawMenu x y = void $ foldM drawer y gameTitle
     where
-        drawer (s:ss) y = do
-            drawString s x y white
-            drawer ss (y + 1)
-        drawer Nil _ = return unit
+        drawer y s = const (y + 1) <$> drawString s x y white
 
-gameTitle = fromFoldable ["      _ _____  _                      _",
-                          "     | |  __ \\| |                    | |",
-                          "   __| | |__) | |     __ _  ___ _   _| | __ _",
-                          "  / _` |  _  /| |    / _` |/ __| | | | |/ _` |",
-                          " | (_| | | \\ \\| |___| (_| | (__| |_| | | (_| |",
-                          "  \\__,_|_|  \\_\\______\\__,_|\\___|\\__,_|_|\\__,_|"]
+gameTitle = ["      _ _____  _                      _",
+             "     | |  __ \\| |                    | |",
+             "   __| | |__) | |     __ _  ___ _   _| | __ _",
+             "  / _` |  _  /| |    / _` |/ __| | | | |/ _` |",
+             " | (_| | | \\ \\| |___| (_| | (__| |_| | | (_| |",
+             "  \\__,_|_|  \\_\\______\\__,_|\\___|\\__,_|_|\\__,_|"]
