@@ -71,7 +71,7 @@ namespace DRLacula
 
         private void InitializeGameState()
         {
-            gameState = Script.initialGameState;
+            gameState = Script.initialState;
         }
         
         private void LoadScripts()
