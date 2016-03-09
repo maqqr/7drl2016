@@ -63,15 +63,14 @@ namespace DRLacula
         protected override void Initialize()
         {
             input.OnKeyPress += KeyPressedHandler;
-            LoadScripts();
-            InitializeGameState();
             hotreload.StartWatching(Path.Combine(RootDirectory, "ps"));
             base.Initialize();
         }
 
-        private void InitializeGameState()
+        private void InitializeGame()
         {
             gameState = Script.initialState;
+            Script.onGameStart(gameState)();
         }
         
         private void LoadScripts()
@@ -94,6 +93,9 @@ namespace DRLacula
             spriteBatch = new SpriteBatch(GraphicsDevice);
             graphics = new Graphics(graphicsDeviceManager, spriteBatch, Content);
             graphics.LoadContent(TerminalWidth, TerminalHeight);
+
+            LoadScripts();
+            InitializeGame();
         }
 
         /// <summary>
@@ -131,9 +133,9 @@ namespace DRLacula
                 LoadScripts();
 
             if (key == Keys.F10)
-                InitializeGameState();
+                InitializeGame();
 
-            gameState = Script.onKeyPress(gameState)(keyCode)(shift);
+            gameState = Script.onKeyPress(gameState)(keyCode)(shift)();
         }
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace DRLacula
         protected override void Draw(GameTime gameTime)
         {
             graphics.BeginDraw();
-            Script.drawFunc(gameState)();
+            graphics.DrawTerminal();
             graphics.EndDraw();
 
             base.Draw(gameTime);

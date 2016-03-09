@@ -27,6 +27,8 @@ namespace DRLacula
 
         public int CharHeight { get; private set; }
 
+        private char[,] terminalChars;
+        private Color[,] terminalColors;
 
         public Graphics(GraphicsDeviceManager graphicsDeviceManager, SpriteBatch spriteBatch, ContentManager content)
         {
@@ -46,6 +48,9 @@ namespace DRLacula
 
             int windowWidth = CharWidth * terminalWidth;
             int windowHeight = CharHeight * terminalHeight;
+
+            terminalChars = new char[terminalHeight, terminalWidth];
+            terminalColors = new Color[terminalHeight, terminalWidth];
 
             pixelEffect = content.Load<Effect>("pixel");
             pixelEffect.Parameters["Resolution"].SetValue(new Vector2(windowWidth, windowHeight));
@@ -107,12 +112,32 @@ namespace DRLacula
             return new Point(c % 16, c / 16);
         }
 
-        public void DrawChar(char c, int x, int y, Color color)
+        public void DrawTerminal()
         {
-            Point p = FontIndex((int)c);
+            for (int y = 0; y < terminalChars.GetLength(0); y++)
+            {
+                for (int x = 0; x < terminalChars.GetLength(1); x++)
+                {
+                    DrawCharOnScreen(terminalChars[y, x], x, y, terminalColors[y, x]);
+                }
+            }
+        }
+
+        private void DrawCharOnScreen(char c, int x, int y, Color color)
+        {
+            Point p = FontIndex(c);
             spriteBatch.Draw(terminalTexture, new Vector2(x * CharWidth, y * CharHeight),
                                  new Rectangle(p.X * CharWidth, p.Y * CharHeight, CharWidth, CharHeight),
                                  color);
+        }
+
+        public void DrawChar(char c, int x, int y, Color color)
+        {
+            if (!(x >= 0 && y >= 0 && y < terminalChars.GetLength(0) && x < terminalChars.GetLength(1)))
+                return;
+
+            terminalChars[y, x] = c;
+            terminalColors[y, x] = color;
         }
 
         public void DrawChar2(string c, int x, int y, int r, int g, int b)

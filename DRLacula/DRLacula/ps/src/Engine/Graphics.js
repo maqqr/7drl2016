@@ -2,25 +2,6 @@
 
 // module Engine.Graphics
 
-exports.for2impl = function(sy) {
-    return function (ey) {
-        return function (sx) {
-            return function (ex) {
-                return function (func) {
-                    return function () {
-                        for (var y=sy; y < ey; y++) {
-                            for (var x=sx; x < ex; x++) {
-                                func(x)(y)();
-                            }
-                        }
-                        return {};
-                    };
-                };
-            };
-        };
-    };
-};
-
 exports.drawStringEx = function(str) {
     return function (x) {
         return function (y) {

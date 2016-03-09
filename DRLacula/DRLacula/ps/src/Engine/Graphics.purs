@@ -18,9 +18,3 @@ drawStringCenter :: String -> Int -> Int -> Color -> EngineEff Unit
 drawStringCenter s x y col = drawStringEx s x y col true
 
 foreign import drawWindow :: forall eff. Int -> Int -> Int -> Int -> Color -> Boolean -> Eff (e :: ENGINE | eff) Unit
-
-foreign import for2impl :: forall eff. Int -> Int -> Int -> Int -> (Int -> Int -> Eff (e :: ENGINE | eff) Unit) -> Eff (e :: ENGINE | eff) Unit
-
--- Dirty hacks to speed up level rendering
-for'' :: forall eff. Int -> Int -> Int -> Int -> (Int -> Int -> Eff (e :: ENGINE | eff) Unit) -> Eff (e :: ENGINE | eff) Unit
-for'' = for2impl

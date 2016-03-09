@@ -6,12 +6,18 @@ import Data.String (fromChar)
 import Data.Char (fromCharCode)
 import Data.Maybe
 import Data.Foldable
+import Control.Monad.Eff (Eff)
 
 import Engine.Color
 import Engine.Graphics
-import Engine.Effects (EngineEff)
+import Engine.Effects (EngineEff, ENGINE)
 import Point
 import Level
+
+foreign import drawLevelImpl
+    :: forall eff. { width :: Int, height :: Int, tiles :: Array Tile }
+    -> (Int -> Int -> Tile -> Eff (e :: ENGINE | eff) Unit)
+    -> Eff (e :: ENGINE | eff) Unit
 
 tileChar :: Tile -> Char
 tileChar Ground = '.'
@@ -28,10 +34,12 @@ viewportPoints = do
     return $ Point {x: x', y: y'} 
 
 drawLevel :: Level -> EngineEff Unit
-drawLevel lvl@(Level level) =
-    for'' 0 20 0 20 (\x' y' -> drawTile (Point {x: x', y: y'}))
+drawLevel lvl@(Level level) = drawLevelImpl level drawTile'
     where
         drawer y p = const (y + 1) <$> drawTile p
+    
+        drawTile' :: Int -> Int -> Tile -> EngineEff Unit
+        drawTile' x y t = drawChar (tileChar t) x y (tileColor t)
     
         drawTile :: Point -> EngineEff Unit
         drawTile p'@(Point p) =
@@ -39,8 +47,6 @@ drawLevel lvl@(Level level) =
             in case maybeTile of
                 Just t  -> drawChar (tileChar t) p.x p.y (tileColor t)
                 Nothing -> return unit
-
-        
 
 drawMenu :: EngineEff Unit
 drawMenu = do
